@@ -1,0 +1,8 @@
+name: MineMath
+version: 0.1
+api-version: 1.16
+main: net.lyczak.MineMath.MineMath
+commands:
+  m2:
+    description: Define and plot multivariable functions!
+    usage: /<command> [subcommand]
