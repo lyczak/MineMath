@@ -15,19 +15,6 @@ import java.util.logging.Logger;
 public class PlayerSessionManager {
     private Map<UUID, PlayerSession> playerSessions = new HashMap<UUID, PlayerSession>();
 
-    private Logger logger;
-    private File sessionsFile;
-    private Gson gson = new Gson();
-
-    public PlayerSessionManager(Logger logger, File sessionsFile) {
-        this.logger = logger;
-        this.sessionsFile = sessionsFile;
-    }
-
-    public PlayerSessionManager(File sessionsFile) {
-        this.sessionsFile = sessionsFile;
-    }
-
     public PlayerSession get(Player p) {
         PlayerSession s = playerSessions.get(p.getUniqueId());
         if(s == null) {
@@ -43,17 +30,5 @@ public class PlayerSessionManager {
 
     public void remove(Player p) {
         playerSessions.remove(p);
-    }
-
-    public void save() {
-        try {
-            gson.toJson(playerSessions, new FileWriter(sessionsFile));
-        } catch (JsonIOException e) {
-            logger.severe("Failed to serialize PlayerSessions to JSON.");
-            e.printStackTrace();
-        } catch (IOException e) {
-            logger.severe("Failed to save PlayerSessions.");
-            e.printStackTrace();
-        }
     }
 }

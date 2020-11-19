@@ -11,11 +11,9 @@ public class PlayerSessionListener implements Listener {
     public PlayerSessionListener(PlayerSessionManager psm) {
         this.psm = psm;
     }
-/*
+
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         psm.remove(event.getPlayer());
     }
-
- */
 }
