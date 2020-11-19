@@ -11,13 +11,9 @@ import net.lyczak.MineMath.plot.PlayerSessionManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-
 public class MineMath extends JavaPlugin {
-    private File sessionsFile = new File(getDataFolder(), "sessions.json");
 
-    private PlayerSessionManager playerSessionMgr = new PlayerSessionManager(getLogger(), sessionsFile);
+    private PlayerSessionManager playerSessionMgr = new PlayerSessionManager();
     private InstructionManager instructionMgr = new InstructionManager(playerSessionMgr);
     private CommandHandler commandHandler = new CommandHandler(this);
 
@@ -26,12 +22,6 @@ public class MineMath extends JavaPlugin {
         getLogger().info("MineMath is starting up...");
 
         saveDefaultConfig();
-        try {
-            sessionsFile.createNewFile();
-        } catch (IOException e) {
-            getLogger().severe("An error occurred while creating the session-store file.");
-            e.printStackTrace();
-        }
 
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new PlayerSessionListener(playerSessionMgr), this);
@@ -46,8 +36,6 @@ public class MineMath extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("MineMath is shutting down...");
-
-        playerSessionMgr.save();
 
         getLogger().info("MineMath has shut down!");
     }
