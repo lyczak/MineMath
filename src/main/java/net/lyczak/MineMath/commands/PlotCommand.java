@@ -36,7 +36,7 @@ public class PlotCommand extends CommandBase {
 
         Queue<PlayerInstruction> iq = session.getInstructionQueue();
 
-        Plot plot = new Plot();
+        Plot plot = new Plot(plugin);
         iq.add(new SelectPlotMinInstruction(plot));
         iq.add(new SelectPlotMaxInstruction(plot, session));
         iq.element().instruct(player);

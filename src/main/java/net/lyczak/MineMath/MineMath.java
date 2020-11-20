@@ -1,9 +1,6 @@
 package net.lyczak.MineMath;
 
-import net.lyczak.MineMath.commands.FunctionCommand;
-import net.lyczak.MineMath.commands.PlotCommand;
-import net.lyczak.MineMath.commands.RangeCommand;
-import net.lyczak.MineMath.commands.SurfaceCommand;
+import net.lyczak.MineMath.commands.*;
 import net.lyczak.MineMath.instructions.InstructionManager;
 import net.lyczak.MineMath.listeners.PlayerSessionListener;
 import net.lyczak.MineMath.listeners.WandListener;
@@ -45,6 +42,7 @@ public class MineMath extends JavaPlugin {
         commandHandler.register(new RangeCommand(this));
         commandHandler.register(new SurfaceCommand(this));
         commandHandler.register(new PlotCommand(this));
+        commandHandler.register(new OptionCommand(this));
     }
 
     public PlayerSessionManager getPlayerSessionManager() {

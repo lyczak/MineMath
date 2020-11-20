@@ -13,10 +13,11 @@ public class Matrix {
         this.c3 = c3.clone();
     }
 
-    public Matrix(Vector diag) {
-        this.c1 = new Vector(diag.getX(), 0, 0);
-        this.c2 = new Vector(0, diag.getY(), 0);
-        this.c3 = new Vector(0, 0, diag.getZ());
+    public static Matrix fromDiagonal(Vector diag) {
+        return new Matrix(
+                new Vector(diag.getX(), 0, 0),
+                new Vector(0, diag.getY(), 0),
+                new Vector(0, 0, diag.getZ()));
     }
 
     public Matrix clone() {

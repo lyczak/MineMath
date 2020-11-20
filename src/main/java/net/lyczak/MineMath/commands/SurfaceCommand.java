@@ -34,10 +34,17 @@ public class SurfaceCommand extends CommandBase {
                 return false;
             }
 
+            Plot plot = session.getActivePlot();
+            if (plot == null) {
+                player.sendMessage(ChatColor.RED + "No plotting area is defined!\nUse " +
+                        ChatColor.BLUE + "/m2 plot" + ChatColor.RED + " to define one");
+                return true;
+            }
+
             boolean badSyntax = false;
             Function[] r = new Function[3];
             for (int i = 0; i < args.length; i++) {
-                r[i] = new Function("r_" + i, args[i], "u", "v");
+                r[i] = new Function("r_" + i, args[i], "u", "v", "t");
                 for (Function f : session.getFunctions().values()) {
                     r[i].addFunctions(f);
                 }
@@ -50,7 +57,6 @@ public class SurfaceCommand extends CommandBase {
                 return false;
             }
 
-            Plot plot = session.getActivePlot();
             PlotOptions o = session.getOptions();
 
             o.setIFunction(r[0]);
@@ -70,6 +76,6 @@ public class SurfaceCommand extends CommandBase {
 
     @Override
     public String getHelp() {
-        return ChatColor.RED + "/m2 plot 2*u-1 v f(u,v)";
+        return ChatColor.RED + "/m2 surface 2*u-1 v f(u,v)";
     }
 }
