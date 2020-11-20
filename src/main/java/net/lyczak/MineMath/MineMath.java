@@ -3,7 +3,7 @@ package net.lyczak.MineMath;
 import net.lyczak.MineMath.commands.*;
 import net.lyczak.MineMath.instructions.InstructionManager;
 import net.lyczak.MineMath.listeners.PlayerSessionListener;
-import net.lyczak.MineMath.listeners.WandListener;
+import net.lyczak.MineMath.listeners.PlayerInteractListener;
 import net.lyczak.MineMath.plot.PlayerSessionManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,7 +22,7 @@ public class MineMath extends JavaPlugin {
 
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new PlayerSessionListener(playerSessionMgr), this);
-        pm.registerEvents(new WandListener(this), this);
+        pm.registerEvents(new PlayerInteractListener(this), this);
 
         this.getCommand("m2").setExecutor(commandHandler);
         registerCommands();

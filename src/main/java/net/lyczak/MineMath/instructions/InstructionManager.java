@@ -6,6 +6,7 @@ import org.bukkit.event.player.PlayerEvent;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Queue;
 
 public class InstructionManager {
@@ -15,41 +16,60 @@ public class InstructionManager {
         this.psm = psm;
     }
 
-    public boolean complete(PlayerEvent event) {
+    /**
+     * Given a PlayerEvent, find that Player's instructionQueue and
+     * instructionList. If event completes the head PlayerInstruction of
+     * their instructionQueue, return true. Otherwise, return true at
+     * the first instruction in their instructionList that completes.
+     * @param event a PlayerEvent presumably belonging to a player with a session and instructions
+     * @return true if a PlayerInstruction successfully completes, false otherwise
+     */
+    public boolean tryComplete(PlayerEvent event) {
         PlayerSession session = psm.get(event.getPlayer());
         if (session == null) {
             return false;
         }
 
         Queue<PlayerInstruction> queue = session.getInstructionQueue();
-        PlayerInstruction instruction = queue.peek();
-        if (instruction == null) {
+        PlayerInstruction queueHead = queue.peek();
+        if (queueHead == null) {
             return false;
         }
 
-        Type[] types = instruction.getClass().getGenericInterfaces();
-        for (Type ifaceType : types) {
-            ParameterizedType ifacePType = (ParameterizedType) ifaceType;
+        if (tryCompleteInstruction(queueHead, event)) {
+            queue.remove();
 
-            if(!PlayerInstruction.class.isAssignableFrom((Class<?>) ifacePType.getRawType())) {
-                continue;
+            PlayerInstruction next = queue.peek();
+            if (next != null) {
+                next.instruct(event.getPlayer());
             }
+            return true;
+        }
 
-            Class<?> eventClass = (Class<?>) ifacePType.getActualTypeArguments()[0];
-            if (eventClass.isAssignableFrom(event.getClass())) {
-                if(instruction.tryComplete(event)) {
-                    queue.remove();
-
-                    PlayerInstruction next = queue.peek();
-                    if (next != null) {
-                        next.instruct(event.getPlayer());
-                    }
-
-                    return true;
-                }
+        List<PlayerInstruction> list = session.getInstructionList();
+        for (PlayerInstruction instruction : list) {
+            if (tryCompleteInstruction(instruction, event)) {
+                return true;
             }
         }
 
+        return false;
+    }
+
+    private boolean tryCompleteInstruction(PlayerInstruction instruction, PlayerEvent event) {
+        Type[] types = instruction.getClass().getGenericInterfaces();
+        for (Type ifaceType : types) { // Usually only one item but just in case...
+            ParameterizedType ifacePType = (ParameterizedType) ifaceType;
+
+            if(!PlayerInstruction.class.isAssignableFrom((Class<?>) ifacePType.getRawType())) {
+                continue; // we're only really looking for PlayerInstruction<E>
+            }
+
+            Class<?> eventClass = (Class<?>) ifacePType.getActualTypeArguments()[0]; // What's E?
+            if (eventClass.isAssignableFrom(event.getClass())) { // does event's class extend E?
+                return instruction.tryComplete(event);
+            }
+        }
         return false;
     }
 }
