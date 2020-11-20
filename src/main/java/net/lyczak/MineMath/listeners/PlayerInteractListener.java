@@ -7,10 +7,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-public class WandListener implements Listener {
+public class PlayerInteractListener implements Listener {
     private MineMath plugin;
 
-    public WandListener(MineMath plugin) {
+    public PlayerInteractListener(MineMath plugin) {
         this.plugin = plugin;
     }
 
@@ -22,6 +22,6 @@ public class WandListener implements Listener {
         if (event.getHand() == EquipmentSlot.OFF_HAND)
             return;
 
-        plugin.getInstructionManager().complete(event);
+        plugin.getInstructionManager().tryComplete(event);
     }
 }
