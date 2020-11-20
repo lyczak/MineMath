@@ -38,10 +38,10 @@ public class MineMath extends JavaPlugin {
     }
 
     private void registerCommands() {
-        commandHandler.register(new FunctionCommand(this));
+        commandHandler.register(new DefunCommand(this));
         commandHandler.register(new RangeCommand(this));
-        commandHandler.register(new SurfaceCommand(this));
         commandHandler.register(new PlotCommand(this));
+        commandHandler.register(new DefplotCommand(this));
         commandHandler.register(new OptionCommand(this));
     }
 
