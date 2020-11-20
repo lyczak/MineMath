@@ -28,9 +28,12 @@ public class SurfaceCommand extends CommandBase {
             Player player = (Player) sender;
             PlayerSession session = sessionManager.get(player);
 
-            if (args.length != 3) {
+            boolean singleFunction = args.length == 1;
+            if (!(args.length == 3 || singleFunction)) {
                 player.sendMessage(ChatColor.RED + "This command requires three " +
-                        "mathematical expressions as arguments.");
+                        "mathematical expressions in terms of u, v, and t as arguments.");
+                player.sendMessage(ChatColor.RED + "Alternatively, you can provide a " +
+                        "single expression in terms of x, y, and t.");
                 return false;
             }
 
@@ -43,21 +46,31 @@ public class SurfaceCommand extends CommandBase {
 
             boolean badSyntax = false;
             Function[] r = new Function[3];
-            for (int i = 0; i < args.length; i++) {
-                r[i] = new Function("r_" + i, args[i], "u", "v", "t");
-                for (Function f : session.getFunctions().values()) {
-                    r[i].addFunctions(f);
-                }
-                if (r[i].checkSyntax() == Expression.SYNTAX_ERROR_OR_STATUS_UNKNOWN) {
-                    badSyntax = true;
-                    player.sendMessage(ChatColor.RED + "Invalid syntax: " + args[i]);
+
+            if (singleFunction) {
+                r[2] = new Function("r_2", args[0], "x", "y", "t");
+                badSyntax = hasBadSyntax(r[2], player);
+            } else {
+                for (int i = 0; i < 3; i++) {
+                    r[i] = new Function("r_" + i, args[i], "u", "v", "t");
+                    for (Function f : session.getFunctions().values()) {
+                        r[i].addFunctions(f);
+                    }
+                    badSyntax = hasBadSyntax(r[i], player);
                 }
             }
+
             if(badSyntax) {
                 return false;
             }
 
             PlotOptions o = session.getOptions();
+
+            if (singleFunction) {
+                r[0] = new Function("r_0", "x", "x", "y", "t");
+                r[1] = new Function("r_1", "y", "x", "y", "t");
+                o.setUVForSurfaces();
+            }
 
             o.setIFunction(r[0]);
             o.setJFunction(r[1]);
@@ -72,6 +85,14 @@ public class SurfaceCommand extends CommandBase {
             sender.sendMessage("This command must be run by a player.");
             return false;
         }
+    }
+
+    private boolean hasBadSyntax(Function f, Player p) {
+        if (f.checkSyntax() == Expression.SYNTAX_ERROR_OR_STATUS_UNKNOWN) {
+            p.sendMessage(ChatColor.RED + "Invalid syntax: " + f.getFunctionExpressionString());
+            return true;
+        }
+        return false;
     }
 
     @Override

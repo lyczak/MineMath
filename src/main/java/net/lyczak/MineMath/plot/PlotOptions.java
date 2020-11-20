@@ -65,6 +65,14 @@ public class PlotOptions {
         this.rk = rk;
     }
 
+    public void setUVForSurfaces() {
+        uMin = min.getX();
+        uRange = range.getX();
+
+        vMin = min.getY();
+        vRange = range.getY();
+    }
+
     public void setIBounds(double min, double max) {
         this.min.setX(min);
         this.range.setX(max - min);
