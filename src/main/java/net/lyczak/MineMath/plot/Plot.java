@@ -10,9 +10,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Plot {
-    private static final int TICKS_PER_SAMPLE = 4;
+    private static final int TICKS_PER_SAMPLE = 4; // These two properties for time-varying plots
     public static final float SAMPLES_PER_SECOND = 20.0f / TICKS_PER_SAMPLE; // Assuming 20 ticks per second
+
     private static final double SAMPLES_PER_DISTANCE = 4; // Samples per block distance of range
+    private static final double AXIS_SCALE = 0.3; // Proportion of the bounds box that each axis spans [0, 0.5] usually
+
     private static final Vector ZERO_VECTOR = new Vector(0, 0, 0);
     private static final Vector NORMALIZED_BOUNDING_VECTOR = new Vector(1, 1, 1);
 
@@ -148,7 +151,7 @@ public class Plot {
         }
 
 
-        double da = 0.20 / Math.sqrt(samples); // TODO: Make scale modifiable
+        double da = AXIS_SCALE / samples;
         for (int i = 0; i < axes.length; i++) {
             double a = 0;
             for (int j = 0; j <= samples; j++) {
