@@ -8,11 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.mariuszgromada.math.mxparser.Function;
 
-public class FunctionCommand extends CommandBase {
+public class DefunCommand extends CommandBase {
     private PlayerSessionManager sessionManager;
 
-    public FunctionCommand(MineMath plugin) {
-        super(plugin, "function");
+    public DefunCommand(MineMath plugin) {
+        super(plugin, "defun");
         this.sessionManager = plugin.getPlayerSessionManager();
     }
 
@@ -49,6 +49,6 @@ public class FunctionCommand extends CommandBase {
 
     @Override
     public String getHelp() {
-        return "/m2 def f(x,y)=y^2*cos(x)";
+        return "/m2 defun f(x,y)=y^2*cos(x)";
     }
 }
