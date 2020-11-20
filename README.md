@@ -1,5 +1,5 @@
 # Woah, this looks cool!
-
+![Realtime render of an oscillating saddle in Minecraft](https://user-images.githubusercontent.com/4741907/99839284-71107900-2b38-11eb-8067-d4607180e0a0.gif)
 ## What is it?
 MineMath is a multivariate function plotting toolkit to help
 students develop mathematics and 3D visualization skills
