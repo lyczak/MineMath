@@ -57,9 +57,11 @@ public class RangeCommand extends CommandBase implements TabCompleter {
                     case 'v':
                         o.setVBounds(min, max);
                         break;
+                    case 't':
+                        o.setTBounds(min, max);
                     default:
                         sender.sendMessage(ChatColor.RED + "Invalid range parameter: " + rangeParam);
-                        sender.sendMessage("Valid options include i (or x), j (or y), k (or z), u, or v.");
+                        sender.sendMessage("Valid options include i (or x), j (or y), k (or z), u, v, or t.");
                         return false;
                 }
 
@@ -80,7 +82,7 @@ public class RangeCommand extends CommandBase implements TabCompleter {
                                       String alias,
                                       String[] args) {
         if(args.length <= 1) {
-            return Arrays.asList("u", "v", "i", "j", "k", "x", "y", "z");
+            return Arrays.asList("u", "v", "i", "j", "k", "x", "y", "z", "t");
         } else if (args.length == 2)  {
             return Arrays.asList("0", "-1");
         } else if (args.length == 3) {
@@ -91,6 +93,6 @@ public class RangeCommand extends CommandBase implements TabCompleter {
 
     @Override
     public String getHelp() {
-        return "/m2 range [i|x|j|y|k|z|u|v] [minimum] [maximum]";
+        return "/m2 range [i|x|j|y|k|z|u|v|t] [minimum] [maximum]";
     }
 }

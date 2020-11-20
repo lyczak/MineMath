@@ -15,21 +15,27 @@ public class PlotOptions {
     private double uRange = 2;
     private double vMin = -1;
     private double vRange = 2;
+    private double tMin = 0;
+    private double tRange = 1;
     private Integer uSamples;
     private Integer vSamples;
+    private Integer tSamples = Math.round(5.0f * Plot.SAMPLES_PER_SECOND);
 
     private PlotMaterialProvider materialProvider = new DefaultMaterialProvider();
     private Vector normalizedAxesPosition = new Vector().zero();
     private boolean axesSwapped = true;
+    private boolean timeVarying = false;
+    private boolean timeRepeating = false;
 
-    public Vector calcNormalizedPosition(double u, double v) {
+    Vector calcNormalizedPosition(double u, double v, double t) {
         u = u * uRange + uMin;
         v = v * vRange + vMin;
+        t = t * tRange + tMin;
 
         Vector r = new Vector(
-                ri.calculate(u, v),
-                rj.calculate(u, v),
-                rk.calculate(u, v));
+                ri.calculate(u, v, t),
+                rj.calculate(u, v, t),
+                rk.calculate(u, v, t));
         r.subtract(min).divide(range);
 
         return axesSwapped ? new Vector(r.getX(), r.getZ(), r.getY()) : r;
@@ -98,12 +104,20 @@ public class PlotOptions {
         return vMin;
     }
 
+    public double getTMin() {
+        return tMin;
+    }
+
     public double geURange() {
         return uRange;
     }
 
     public double getVRange() {
         return vRange;
+    }
+
+    public double getTRange() {
+        return tRange;
     }
 
     public void setUBounds(double uMin, double uMax) {
@@ -116,12 +130,21 @@ public class PlotOptions {
         this.vRange = vMax - this.vMin;
     }
 
+    public void setTBounds(double tMin, double tMax) {
+        this.tMin = tMin;
+        this.tRange = tMax - this.tMin;
+    }
+
     public Integer getUSamples() {
         return uSamples;
     }
 
     public Integer getVSamples() {
         return vSamples;
+    }
+
+    public Integer getTSamples() {
+        return tSamples;
     }
 
     public void setUSamples(Integer uSamples) {
@@ -140,6 +163,13 @@ public class PlotOptions {
         this.vSamples = vSamples;
     }
 
+    public void setTSamples(Integer tSamples) {
+        if(tSamples == null || tSamples <= 0) {
+            return;
+        }
+        this.tSamples = tSamples;
+    }
+
     public PlotMaterialProvider getMaterialProvider() {
         return materialProvider;
     }
@@ -154,5 +184,21 @@ public class PlotOptions {
 
     public void setAxesSwapped(boolean axesSwapped) {
         this.axesSwapped = axesSwapped;
+    }
+
+    public boolean isTimeVarying() {
+        return timeVarying;
+    }
+
+    public void setTimeVarying(boolean timeVarying) {
+        this.timeVarying = timeVarying;
+    }
+
+    public boolean isTimeRepeating() {
+        return timeRepeating;
+    }
+
+    public void setTimeRepeating(boolean timeRepeating) {
+        this.timeRepeating = timeRepeating;
     }
 }
